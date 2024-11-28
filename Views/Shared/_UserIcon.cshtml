@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Authentication
+@{
+    var userName = User.Identity?.Name ?? "User";
+}
+
+<div class="floating-user-icon">
+    <span class="user-icon">
+        <i class="bi bi-person-circle"></i>
+    </span>
+    <span>@userName</span>
+    <form asp-controller="Login" asp-action="Logout" method="post" style="display:inline;">
+        <button type="submit" class="logout-link btn btn-link">Logout</button>
+    </form>
+</div>
+
+<style>
+    .floating-user-icon {
+        position: fixed;
+        top: 100px;
+        right: 10px;
+        background-color: #f8f9fa;
+        border-radius: 20px;
+        padding: 10px 15px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        z-index: 1000;
+    }
+
+    .user-icon {
+        font-size: 1.5rem;
+    }
+
+    .logout-link {
+        color: inherit;
+        text-decoration: underline;
+        cursor: pointer;
+        padding: 0;
+    }
+</style>

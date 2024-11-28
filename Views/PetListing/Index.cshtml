@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Pet>
+
+@{
+    ViewData["Title"] = "Pet Gallery";
+}
+
+<div class="container my-4">
+    <h1 class="text-center mb-4">Pet Gallery</h1>
+    <div class="row">
+        @foreach (var pet in Model)
+
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <img src="~/img/blog-2.jpg" class="card-img-top" alt="@pet.PetName">
+                    <div class="card-body">
+                        <h5 class="card-title">@pet.PetName</h5>
+                        <p class="card-text"><strong>Breed:</strong> @pet.Breed</p>
+                        <a href="@Url.Action("Details", "PetListing", new { id = pet.PetId })" class="btn btn-primary btn-block">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

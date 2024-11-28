@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Login Page";
+}
+@model LoginViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!--Login page start-->
+<div class="container-fluid pt-5">
+    <div class="container">
+        <div class="border-start border-5 border-primary ps-5 mb-5" style="max-width: 600px;">
+            <h2 class="text-primary text-uppercase">User Login</h2>
+            <span class="text-danger">@ViewBag.Error</span>
+        </div>
+        <div class="row g-5">
+            <div class="col-lg-7">
+                <form method="post">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <input asp-for="UserName" type="text" class="form-control bg-light border-0 px-4" placeholder="Username" style="height: 55px;">
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <input asp-for="Password" type="password" class="form-control bg-light border-0 px-4" placeholder="Password" style="height: 55px;">
+                        </div>
+                        <div class="col-6">
+                            <input asp-for="UserType" type="hidden" value=@ViewBag.link />
+                            <button class="btn btn-primary w-100 py-3" type="submit">Login</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-3">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <h6 class="text-primary text-uppercase">Dont have an account yet?</h6>
+                    </div>
+                    <div class="col-6">
+                        @if(ViewBag.link == "Shelter")
+                        {
+                            <input type="button" class="btn btn-primary w-100 py-3" value="Sign Up" onclick="location.href='@Url.Action("Index", "ShelterSignUp")'" />
+                        }
+                        else
+                        {
+                            <input type="button" class="btn btn-primary w-100 py-3" value="Sign Up" onclick="location.href='@Url.Action("Index", "AdopterSignUp")'" />
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Login page end-->
