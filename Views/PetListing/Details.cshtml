@@ -8,25 +8,52 @@
 <div class="container my-5">
     <div class="row">
         <div class="col-md-6">
-            <img src="~/img/blog-2.jpg")" class="img-fluid" alt="@Model.PetName">
+            <img src="~/img/pets/@(Model.PetId).jpg")" class="img-fluid" alt="@Model.PetName">
         </div>
         <div class="col-md-6">
             <h1>@Model.PetName</h1>
             <p><strong>Breed:</strong> @Model.Breed</p>
             <p><strong>Type:</strong> @Model.PetType</p>
-            <p><strong>Size:</strong> @Model.Size</p>
-            <p><strong>Fur Type:</strong> @Model.FurType</p>
-            <p><strong>Shedding Level:</strong> @Model.SheddingLevel</p>
-            <p><strong>Training Level:</strong> @Model.TrainingLevel</p>
-            <p><strong>Exercise Requirement:</strong> @Model.ExcerciseRequirement</p>
-            <p><strong>Neutered:</strong> @(Model.Neutered ? "Yes" : "No")</p>
-            <p><strong>Declawed:</strong> @(Model.Declawed ? "Yes" : "No")</p>
-            <p><strong>Social Level:</strong> @Model.SocailLevel</p>
+            @if (!string.IsNullOrEmpty(@Model.Size))
+            {
+                <p><strong>Size:</strong> @Model.Size</p>
+            }  
+            @if (!string.IsNullOrEmpty(@Model.FurType))
+            {
+                <p><strong>Fur Type:</strong> @Model.FurType</p>
+            }
+            @if (!string.IsNullOrEmpty(@Model.SheddingLevel))
+            {
+                <p><strong>Shedding Level:</strong> @Model.SheddingLevel</p>
+            }
+            @if (!string.IsNullOrEmpty(@Model.TrainingLevel))
+            {
+                <p><strong>Training Level:</strong> @Model.TrainingLevel</p>
+            }
+            @if (!string.IsNullOrEmpty(@Model.ExcerciseRequirement))
+            {
+                <p><strong>Exercise Requirement:</strong> @Model.ExcerciseRequirement</p>
+            }
+            @if (@Model.Neutered != null)
+            {
+                <p><strong>Neutered:</strong> @((bool)Model.Neutered ? "Yes" : "No")</p>
+            }
+            @if (!string.IsNullOrEmpty(@Model.SocailLevel))
+            {
+                <p><strong>Social Level:</strong> @Model.SocailLevel</p>
+            }            
             <p><strong>Date of Birth:</strong> @Model.DateOfBirth.ToString("MMMM dd, yyyy")</p>
             <p><strong>Description:</strong> @Model.Description</p>
             <p><strong>Status:</strong> @Model.Status</p>
-            <p><strong>Location:</strong> @Model.Location</p>
-            <p><strong>Tags:</strong> @string.Join(", ", Model.Tags)</p>
+            @if (!string.IsNullOrEmpty(@Model.Location))
+            {
+                <p><strong>Location:</strong> @Model.Location</p>
+            }
+            @if (@Model.Tags != null && Model.Tags.Count > 0)
+            {
+                <p><strong>Tags:</strong> @string.Join(", ", Model.Tags)</p>
+            }
+            
         </div>
     </div>
 </div>

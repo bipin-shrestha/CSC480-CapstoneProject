@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetRehome.Models;
@@ -9,10 +10,12 @@ namespace PetRehome.Controllers
     [Authorize]
     public class PetListingController : Controller
     {
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly PetRehomeDbContext _db;
 
-        public PetListingController(PetRehomeDbContext db)
+        public PetListingController(PetRehomeDbContext db, IWebHostEnvironment webHostEnvironment)
         {
+            _webHostEnvironment = webHostEnvironment;
             _db = db;
         }
 
@@ -48,6 +51,78 @@ namespace PetRehome.Controllers
         public IActionResult AddPets()
         {
             return View();
+        }
+
+        [Authorize(Roles = "Shelter")]
+        [HttpPost]
+        public IActionResult AddPets(PetViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var dbPet = new Pet();
+            dbPet.Status = "Available";
+            dbPet.PetName = model.PetName;
+            dbPet.Breed = model.Breed;
+            dbPet.Description = model.Description;
+
+            var shelterId = _db.Shelters.Where(x => x.ShelterLoginEmail == User.Identity.Name).FirstOrDefault().ShelterId;
+            dbPet.ShelterId = shelterId;
+            dbPet.PetType = model.PetType;
+            dbPet.Neutered = model.Neutered;
+            dbPet.Location = model.Location;
+            dbPet.Size = model.Size;
+            dbPet.DateOfBirth = model.DateOfBirth;
+            dbPet.SocailLevel = model.SocialLevel;
+            dbPet.ExcerciseRequirement = model.ExcerciseRequirement;
+            dbPet.AdopterId = 0;
+            dbPet.Neutered = true;
+            dbPet.Declawed = false;
+
+            var imgId = new List<int>();
+            imgId.Add(1);
+            dbPet.ImageIds = imgId;
+
+            _db.Pets.Add(dbPet);
+            _db.SaveChanges();
+
+            if(model.Image != null)
+            {
+                string uploadLocation = Path.Combine(_webHostEnvironment.WebRootPath, "img/pets");
+                string petImageName = dbPet.PetId.ToString() + ".jpg";
+                string filePath = Path.Combine(uploadLocation, petImageName);
+                var image = model.Image;
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    image.CopyTo(stream);
+                }
+            }
+
+
+            TempData["UserMessage"] = model.PetName + " was added successfully!";
+
+            return Redirect("/PetListing");
+        }
+
+        [Authorize(Roles = "Shelter")]
+        [HttpGet]
+        public IActionResult DeletePets (string petId)
+        {
+            var pet = _db.Pets.Find(petId);
+
+            if(pet == null)
+            {
+                return NotFound();
+            }
+
+            _db.Pets.Remove(pet);
+            _db.SaveChanges();
+
+            TempData["UserMessage"] = pet.PetName + " was deleted successfully!";
+
+            return Redirect("/PetListing");
         }
 
         [Authorize(Roles = "Shelter")]
