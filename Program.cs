@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetRehome.Models;
 
@@ -17,8 +18,11 @@ builder.Services.AddAuthorization(options =>
             options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
         });
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllersWithViews();
-
+builder.Services.AddControllersWithViews()
+    .AddMvcOptions(options =>
+    {
+        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

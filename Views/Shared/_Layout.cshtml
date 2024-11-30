@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http
+@using System.Security.Claims
 @inject IHttpContextAccessor HttpContextAccessor
 <!DOCTYPE html>
 <html lang="en">
@@ -70,14 +71,14 @@
                 </div>               
                 @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                 {
-                    if(@HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserType").Value == "Shelter")
+                    if(@HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role && c.Value == "Shelter") != null)
                     {
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Shelter Functions</a>
                             <div class="dropdown-menu m-0">
-                                <a asp-action="index" asp-controller="login" class="dropdown-item">Add Pets</a>
-                                <a asp-action="index" asp-controller="login" class="dropdown-item">Edit Pets</a>
-                                <a asp-action="index" asp-controller="login" class="dropdown-item">Messages</a>
+                                <a asp-action="AddPets" asp-controller="PetListing" class="dropdown-item">Add Pets</a>
+                                <a asp-action="EditPets" asp-controller="PetListing" class="dropdown-item">Edit Pets</a>
+                                <a asp-action="index" asp-controller="message" class="dropdown-item">Messages</a>
                             </div>
                         </div>
                     }
@@ -86,7 +87,7 @@
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Adopter Functions</a>
                             <div class="dropdown-menu m-0">
-                                <a asp-action="index" asp-controller="login" class="dropdown-item">Messages</a>
+                                <a asp-action="index" asp-controller="message" class="dropdown-item">Messages</a>
                                 <a asp-action="index" asp-controller="login" class="dropdown-item">View Favorites</a>
                             </div>
                         </div>

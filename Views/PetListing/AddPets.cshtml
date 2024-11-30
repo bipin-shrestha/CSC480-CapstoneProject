@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Add Pet Page";
+}
+@model PetViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="container my-4">
+    <div class="border-start border-5 border-primary ps-5 mb-5" style="max-width: 600px;">
+        <h2 class="text-primary text-uppercase">Add a Pet</h2>
+        <span class="text-danger">@ViewBag.Error</span>
+    </div>
+    <div class="row g-5">
+        <div class="col-lg-10">
+            <form method="post">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <select asp-for="PetType" class="form-control bg-light border-0 px-4" id="PetType" placeholder="Pet Type" style="height: 55px;">
+                            <option value="">-- Select Pet Type --</option>
+                            <option value="Dog">Dog</option>
+                            <option value="Cat">Cat</option>
+                        </select>
+                        <span asp-validation-for="PetType" class="text-danger"></span>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="PetName" type="text" class="form-control bg-light border-0 px-4" placeholder="Pet Name" style="height: 55px;">
+                        <span asp-validation-for="PetName" class="text-danger"></span>
+                    </div>
+                    <div class="col-6">
+                        <select asp-for="Breed" class="form-control bg-light border-0 px-4" id="Breed" style="height: 55px;">
+                            <option value="">-- Select Breed --</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="DateOfBirth" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" class="form-control bg-light border-0 px-4" placeholder="Date of Birth" style="height: 55px;">
+                    </div>
+                    <div class="col-12">
+                        <textarea asp-for="Description" class="form-control bg-light border-0 px-4" placeholder="Description" style="height: 200px;"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary w-50 py-2" type="submit">Add Pet</button>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </<div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#PetType').change(function () {
+            console.log("test");
+            var petType = $(this).val();
+            if (petType) {
+                $.ajax({
+                    url: '@Url.Action("GetBreedsByType", "PetListing")',
+                    data: { petType: petType },
+                    type: 'GET',
+                    success: function (data) {
+                        var breedDropdown = $('#Breed');
+                        breedDropdown.empty();
+                        breedDropdown.append('<option value="">-- Select Breed --</option>');
+                        $.each(data, function (index, breed) {
+                            breedDropdown.append('<option value="' + breed + '">' + breed + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#Breed').empty();
+                $('#Breed').append('<option value="">-- Select Breed --</option>');
+            }
+        });
+    });
+</script>

@@ -49,10 +49,18 @@ namespace PetRehome.Controllers
 
             if (isValid)
             {
+                bool isShelter = false;
+                if (_db.Shelters.Any(x => x.ShelterLoginEmail == user.UserName))
+                    isShelter = true;
+                var role = string.Empty;
+                if (isShelter)
+                    role = "Shelter";
+                else
+                    role = "Adopter";
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim("UserType", model.UserType)
+                    new Claim(ClaimTypes.Role, role)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
