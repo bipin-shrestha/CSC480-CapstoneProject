@@ -79,23 +79,23 @@ namespace PetRehome.Models
         public string PetName { get; set; }
         public string Breed { get; set; }
         public string PetType { get; set; }
-        public string Size { get; set; }
-        public string FurType { get; set; }
-        public string SheddingLevel { get;set; }
-        public string TrainingLevel { get; set; }
-        public string ExcerciseRequirement { get; set; }
-        public bool Neutered { get; set; }
-        public bool Declawed { get; set; }
-        public string SocailLevel { get; set; }
+        public string ? Size { get; set; }
+        public string ? FurType { get; set; }
+        public string ? SheddingLevel { get;set; }
+        public string ? TrainingLevel { get; set; }
+        public string ? ExcerciseRequirement { get; set; }
+        public bool ? Neutered { get; set; }
+        public bool ? Declawed { get; set; }
+        public string ? SocailLevel { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string Description { get; set; }
-        public List<int> ImageIds { get; set; }
-        public List<string> MedicalHistory { get; set; }
-        public List<string> Tags { get;set; }
-        public string Status { get; set; }
-        public string Location { get; set; }
-        public int ShelterId { get; set; }
-        public int AdopterId { get; set; }
+        public string ? Description { get; set; }
+        public List<int> ? ImageIds { get; set; }
+        public List<string> ? MedicalHistory { get; set; }
+        public List<string> ? Tags { get;set; }
+        public string ? Status { get; set; }
+        public string ? Location { get; set; }
+        public int ? ShelterId { get; set; }
+        public int ? AdopterId { get; set; }
     }
 
     public class Message

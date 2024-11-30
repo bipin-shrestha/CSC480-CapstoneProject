@@ -11,11 +11,11 @@
     </div>
     <div class="row g-5">
         <div class="col-lg-10">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 <div class="row g-3">
                     <div class="col-6">
                         <select asp-for="PetType" class="form-control bg-light border-0 px-4" id="PetType" placeholder="Pet Type" style="height: 55px;">
-                            <option value="">-- Select Pet Type --</option>
+                            <option value="">Select Pet Type</option>
                             <option value="Dog">Dog</option>
                             <option value="Cat">Cat</option>
                         </select>
@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-6">
                         <select asp-for="Breed" class="form-control bg-light border-0 px-4" id="Breed" style="height: 55px;">
-                            <option value="">-- Select Breed --</option>
+                            <option value="">Select Breed</option>
                         </select>
                     </div>
                     <div class="col-6">
@@ -35,6 +35,57 @@
                     </div>
                     <div class="col-12">
                         <textarea asp-for="Description" class="form-control bg-light border-0 px-4" placeholder="Description" style="height: 200px;"></textarea>
+                    </div>
+                    <div class="col-6">
+                        <select asp-for="TrainingLevel" class="form-control bg-light border-0 px-4" id="TrainingLevel" style="height: 55px;">
+                            <option value="">Select Training Level</option>
+                            <option value="Mild">Mild</option>
+                            <option value="Mediun">Medium</option>
+                            <option value="Heavy">Heavy</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <select asp-for="Neutered" class="form-control bg-light border-0 px-4" id="Neutered" style="height: 55px;">
+                            <option value="">Neutered?</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <select asp-for="ExcerciseRequirement" class="form-control bg-light border-0 px-4" id="ExcerciseRequirement" style="height: 55px;">
+                            <option value="">Excercise Requirement</option>
+                            <option value="1 day a week">1 day a week</option>
+                            <option value="2 days a week">2 days a week</option>
+                            <option value="3 days a week">3 days a week</option>
+                            <option value="4 days a week">4 days a week</option>
+                            <option value="Daily">Daily</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="Location" type="text" class="form-control bg-light border-0 px-4" placeholder="Location" style="height: 55px;">
+                    </div>
+                    <div class="col-6">
+                        <textarea asp-for="MedicalHistory" class="form-control bg-light border-0 px-4" placeholder="Medical History" style="height: 100px;"></textarea>
+                    </div>
+                    <div class="col-6">
+                        <select asp-for="Size" class="form-control bg-light border-0 px-4" id="Size" style="height: 55px;">
+                            <option value="">Select Pet Size</option>
+                            <option value="Large">Large</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Small">Small</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <select asp-for="SocialLevel" class="form-control bg-light border-0 px-4" id="SocialLevel" style="height: 55px;">
+                            <option value="">Selet Pet Social Level</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Image" class="control-label">Add Photo</label>
+                        <input asp-for="Image" type="file" class="form-control bg-light border-0 px-4" />
                     </div>
                     <div class="col-12">
                         <button class="btn btn-primary w-50 py-2" type="submit">Add Pet</button>
