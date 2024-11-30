@@ -77,7 +77,7 @@ namespace PetRehome.Controllers
                 trans.Rollback();
             }
             
-            return View(model);
+            return Redirect("/login");
         }
 
         private List<SelectListItem> GetStateValues()

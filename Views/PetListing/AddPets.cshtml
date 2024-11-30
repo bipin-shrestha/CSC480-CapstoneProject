@@ -29,6 +29,7 @@
                         <select asp-for="Breed" class="form-control bg-light border-0 px-4" id="Breed" style="height: 55px;">
                             <option value="">Select Breed</option>
                         </select>
+                        <span asp-validation-for="Breed" class="text-danger"></span>
                     </div>
                     <div class="col-6">
                         <input asp-for="DateOfBirth" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" class="form-control bg-light border-0 px-4" placeholder="Date of Birth" style="height: 55px;">
