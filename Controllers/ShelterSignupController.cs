@@ -68,7 +68,7 @@ namespace PetRehome.Controllers
                 trans.Rollback();
             }
 
-            return View(model);
+            return Redirect("/login");
         }
 
         private bool CheckEmailExists(string email)

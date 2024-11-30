@@ -20,18 +20,47 @@ namespace PetRehome.Controllers
         }
 
         [Authorize]
-        public IActionResult Index()
+        public IActionResult Index(string selectedBreed, string selectedType, string selectedLocation)
         {
+            ViewBag.BreedOptions = _db.Pets.Select(p => p.Breed).Distinct().OrderBy(b => b).ToList();
+            ViewBag.TypeOptions = _db.Pets.Select(p => p.PetType).Distinct().OrderBy(t => t).ToList();
+            ViewBag.LocationOPtions = _db.Pets.Select(p => p.Location).Distinct().OrderBy(l => l).ToList();
             var pets = new List<Pet>();
             if (User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role && c.Value == "Shelter") != null)
             {
                 var userName = User.Identity.Name;
                 var shelterId = _db.Shelters.Where(s => s.ShelterLoginEmail == userName).Select(s => s.ShelterId).FirstOrDefault();
                 pets = _db.Pets.Where(x => x.ShelterId == shelterId).ToList();
+                if (!string.IsNullOrEmpty(selectedBreed))
+                {
+                    pets = pets.Where(p => p.Breed == selectedBreed).ToList();
+                }
+                if (!string.IsNullOrEmpty(selectedType))
+                {
+                    pets = pets.Where(p => p.PetType == selectedType).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(selectedLocation))
+                {
+                    pets = pets.Where(p => p.Location == selectedLocation).ToList();
+                }
             }
             else
             {
                 pets = _db.Pets.ToList();
+                if (!string.IsNullOrEmpty(selectedBreed))
+                {
+                    pets = pets.Where(p => p.Breed == selectedBreed).ToList();
+                }
+                if (!string.IsNullOrEmpty(selectedType))
+                {
+                    pets = pets.Where(p => p.PetType == selectedType).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(selectedLocation))
+                {
+                    pets = pets.Where(p => p.Location == selectedLocation).ToList();
+                }
             } 
             return View(pets);
         }
@@ -126,9 +155,40 @@ namespace PetRehome.Controllers
         }
 
         [Authorize(Roles = "Shelter")]
-        public IActionResult EditPets()
+        public IActionResult EditPets(string id)
         {
-            return View();
+            var pet = _db.Pets.FirstOrDefault(p => p.PetId == id);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+            return View(pet);
+        }
+
+        [Authorize(Roles = "Shelter")]
+        [HttpPost]
+        public IActionResult EditPets(Pet pet)
+        {
+            if (!ModelState.IsValid)
+                return View(pet);
+
+            var dbPet = _db.Pets.Find(pet.PetId);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+            dbPet.PetName = pet.PetName;
+            dbPet.Neutered = pet.Neutered;
+            dbPet.Breed = pet.Breed;
+            dbPet.DateOfBirth = pet.DateOfBirth;
+            dbPet.Description = pet.Description;
+            dbPet.TrainingLevel = pet.TrainingLevel;
+            dbPet.ExcerciseRequirement = pet.ExcerciseRequirement;
+            dbPet.Location = pet.Location;
+            dbPet.Size = pet.Size;
+            _db.SaveChanges();
+            TempData["UserMessage"] = pet.PetName + " was updated successfully!";
+            return Redirect("/PetListing");
         }
 
         public JsonResult GetBreedsByType(string petType)

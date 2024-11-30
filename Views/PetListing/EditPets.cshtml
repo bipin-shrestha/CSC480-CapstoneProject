@@ -1,1 +1,138 @@
-﻿<h1>Edit Pets</h1>
+﻿@{
+    ViewData["Title"] = "Edit Pet Page";
+}
+@model Pet
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="~/img/pets/@(Model.PetId).jpg" )" class="img-fluid" alt="@Model.PetName">
+        </div>
+        <div class="col-md-6">
+            <form method="post">
+                @Html.HiddenFor(model => model.PetId)
+                <div class="row g-3">
+                <div class="col-6">
+                    <label asp-for="PetType" class="control-label">Pet Type</label>
+                    <select asp-for="PetType" class="form-control bg-light border-0 px-4" id="PetType" placeholder="Pet Type" style="height: 55px;">
+                        <option value="">Select Pet Type</option>
+                        <option value="Dog">Dog</option>
+                        <option value="Cat">Cat</option>
+                    </select>
+                    <span asp-validation-for="PetType" class="text-danger"></span>
+                </div>
+                <div class="col-6">
+                    <label asp-for="PetName" class="control-label">Pet Name</label>
+                    <input asp-for="PetName" type="text" class="form-control bg-light border-0 px-4" placeholder="Pet Name" style="height: 55px;">
+                    <span asp-validation-for="PetName" class="text-danger"></span>
+                </div>
+                <div class="col-6">
+                    <label asp-for="Breed" class="control-label">Pet Breed</label>
+                    <select asp-for="Breed" class="form-control bg-light border-0 px-4" id="Breed" style="height: 55px;">
+                        <option value="">Select Breed</option>
+                    </select>
+                    <span asp-validation-for="Breed" class="text-danger"></span>
+                </div>
+                <div class="col-6">
+                    <label asp-for="DateOfBirth" class="control-label">Date of Birth</label>
+                    <input asp-for="DateOfBirth" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" class="form-control bg-light border-0 px-4" placeholder="Date of Birth" style="height: 55px;">
+                </div>
+                <div class="col-12">
+                    <label asp-for="Description" class="control-label">Description</label>
+                    <textarea asp-for="Description" class="form-control bg-light border-0 px-4" placeholder="Description" style="height: 200px;"></textarea>
+                </div>
+                <div class="col-6">
+                    <label asp-for="TrainingLevel" class="control-label">Training Level</label>
+                    <select asp-for="TrainingLevel" class="form-control bg-light border-0 px-4" id="TrainingLevel" style="height: 55px;">
+                        <option value="">Select Training Level</option>
+                        <option value="Mild">Mild</option>
+                        <option value="Mediun">Medium</option>
+                        <option value="Heavy">Heavy</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label asp-for="Neutered" class="control-label">Neutered</label>
+                    <select asp-for="Neutered" class="form-control bg-light border-0 px-4" id="Neutered" style="height: 55px;">
+                        <option value="">Neutered?</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label asp-for="ExcerciseRequirement" class="control-label">Excercise Requirement</label>
+                    <select asp-for="ExcerciseRequirement" class="form-control bg-light border-0 px-4" id="ExcerciseRequirement" style="height: 55px;">
+                        <option value="">Excercise Requirement</option>
+                        <option value="1 day a week">1 day a week</option>
+                        <option value="2 days a week">2 days a week</option>
+                        <option value="3 days a week">3 days a week</option>
+                        <option value="4 days a week">4 days a week</option>
+                        <option value="Daily">Daily</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label asp-for="Location" class="control-label">Location</label>
+                    <input asp-for="Location" type="text" class="form-control bg-light border-0 px-4" placeholder="Location" style="height: 55px;">
+                </div>
+                <div class="col-6">
+                    <label asp-for="Size" class="control-label">Size</label>
+                    <select asp-for="Size" class="form-control bg-light border-0 px-4" id="Size" style="height: 55px;">
+                        <option value="">Select Pet Size</option>
+                        <option value="Large">Large</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Small">Small</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary w-50 py-2" type="submit">Update Pet</button>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var petType = $("#PetType").val();
+        if (petType) {
+            $.ajax({
+                url: '@Url.Action("GetBreedsByType", "PetListing")',
+                data: { petType: petType },
+                type: 'GET',
+                success: function (data) {
+                    var breedDropdown = $('#Breed');
+                    breedDropdown.empty();
+                    breedDropdown.append('<option value="">Select Breed</option>');
+                    $.each(data, function (index, breed) {
+                        breedDropdown.append('<option value="' + breed + '">' + breed + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#Breed').empty();
+            $('#Breed').append('<option value="">Select Breed</option>');
+        }
+        $('#PetType').change(function () {
+            var petType = $(this).val();
+            if (petType) {
+                $.ajax({
+                    url: '@Url.Action("GetBreedsByType", "PetListing")',
+                    data: { petType: petType },
+                    type: 'GET',
+                    success: function (data) {
+                        var breedDropdown = $('#Breed');
+                        breedDropdown.empty();
+                        breedDropdown.append('<option value="">Select Breed</option>');
+                        $.each(data, function (index, breed) {
+                            breedDropdown.append('<option value="' + breed + '">' + breed + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#Breed').empty();
+                $('#Breed').append('<option value="">Select Breed</option>');
+            }
+        });
+    });
+</script>

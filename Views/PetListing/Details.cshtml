@@ -1,5 +1,6 @@
 ﻿@model Pet
-
+@using System.Security.Claims
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Pet Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,6 +10,14 @@
     <div class="row">
         <div class="col-md-6">
             <img src="~/img/pets/@(Model.PetId).jpg")" class="img-fluid" alt="@Model.PetName">
+            @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+            {
+                    if (@HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role && c.Value == "Adopter") != null)
+                    {
+                        <a asp-action="sendmessage" asp-controller="message" asp-route-shelterId="@Model.ShelterId" class="btn btn-primary btn-block">Message Shelter</a>
+                    }
+            }
+            
         </div>
         <div class="col-md-6">
             <h1>@Model.PetName</h1>

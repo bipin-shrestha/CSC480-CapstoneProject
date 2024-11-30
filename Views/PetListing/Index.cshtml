@@ -8,30 +8,98 @@
 @{
     ViewData["Title"] = "Pet Gallery";
 }
-
 <div class="container my-4">
     <h1 class="text-center mb-4">Pet Gallery</h1>
-    @if(@TempData["UserMessage"] != null){
-        <span class="text-success">@TempData["UserMessage"]</span>
-    }
-    <div class="row">
-        @foreach (var pet in Model)
 
-        {
-            <div class="col-md-3 mb-4">
-                <div class="card h-100">
-                    <img src="~/img/pets/@(pet.PetId).jpg" class="card-img-top" alt="@pet.PetName" style="max-height: 300px;">
-                    <div class="card-body">
-                        <h5 class="card-title">@pet.PetName</h5>
-                        <p class="card-text"><strong>Breed:</strong> @pet.Breed</p>
-                        <a href="@Url.Action("Details", "PetListing", new { id = pet.PetId })" class="btn btn-primary btn-block">View Details</a>
-                        @if(@HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role && c.Value == "Shelter") != null){
-                            <a href="@Url.Action("Details", "PetListing", new { id = pet.PetId })" class="btn btn-primary btn-block">Edit</a>
-                            <a href="@Url.Action("DeletePets", "PetListing", new { petId = pet.PetId })" class="btn btn-primary btn-block" style="margin-top:5px;">Delete</a>
-                        }                      
-                    </div>
+    @if (@TempData["UserMessage"] != null)
+    {
+        <div class="alert alert-success text-center" role="alert">
+            <span class="text-success">@TempData["UserMessage"]</span>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Filter Section -->
+        <div class="col-md-2">
+            <h4>Filters</h4>
+            <form method="get">
+                <div class="form-group">
+                    <label for="typeFilter">Type</label>
+                    <select id="typeFilter" name="selectedType" class="form-control">
+                        <option value="">All</option>
+                        @foreach (var type in ViewBag.TypeOptions)
+                        {
+                            if (HttpContextAccessor.HttpContext.Request.Query["selectedType"] == type)
+                            {
+                                <option value="@type" selected="selected">@type</option>
+                            }
+                            else
+                            {
+                                <option value="@type">@type</option>
+                            }
+                        }
+                    </select>
                 </div>
+                <div class="form-group">
+                    <label for="breedFilter">Breed</label>
+                    <select id="breedFilter" name="selectedBreed" class="form-control">
+                        <option value="">All</option>
+                        @foreach (var breed in ViewBag.BreedOptions)
+                        {
+                            if (HttpContextAccessor.HttpContext.Request.Query["selectedBreed"] == breed)
+                            {
+                                <option value="@breed" selected="selected">@breed</option>
+                            }
+                            else
+                            {
+                                <option value="@breed">@breed</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="locationFilter">Location</label>
+                    <select id="locationFilter" name="selectedLocation" class="form-control">
+                        <option value="">All</option>
+                        @foreach (var location in ViewBag.LocationOptions)
+                        {
+                            if (HttpContextAccessor.HttpContext.Request.Query["selectedLocation"] == location)
+                            {
+                                <option value="@location" selected="selected">@location</option>
+                            }
+                            else
+                            {
+                                <option value="@location">@location</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-3">Apply Filters</button>
+            </form>
+        </div>
+
+        <!-- Pet Listings Section -->
+        <div class="col-md-10">
+            <div class="row">
+                @foreach (var pet in Model)
+                {
+                    <div class="col-md-3 mb-4">
+                        <div class="card h-100">
+                            <img src="~/img/pets/@(pet.PetId).jpg" class="card-img-top" alt="@pet.PetName" style="max-height: 300px;">
+                            <div class="card-body">
+                                <h5 class="card-title">@pet.PetName</h5>
+                                <p class="card-text"><strong>Breed:</strong> @pet.Breed</p>
+                                <a href="@Url.Action("Details", "PetListing", new { id = pet.PetId })" class="btn btn-primary btn-block">View Details</a>
+                                @if (@HttpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role && c.Value == "Shelter") != null)
+                                {
+                                    <a href="@Url.Action("EditPets", "PetListing", new { id = pet.PetId })" class="btn btn-primary btn-block">Edit</a>
+                                    <a href="@Url.Action("DeletePets", "PetListing", new { petId = pet.PetId })" class="btn btn-primary btn-block mt-2">Delete</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
-        }
+        </div>
     </div>
 </div>

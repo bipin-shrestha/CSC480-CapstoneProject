@@ -2,4 +2,56 @@
     ViewData["Title"] = "Message Page";
 }
 
-<h1>Message</h1>
+@model IEnumerable<MessageViewModel>
+
+<div class="container-fluid pt-5">
+    <div class="container">
+        <div class="border-start border-5 border-primary ps-5 mb-5" style="max-width: 600px;">
+            <h1 class="display-5 text-uppercase mb-0">Messages Received</h1>
+        </div>
+        <div class="row g-5">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Sender Name</th>
+                        <th>Message</th>
+                        <th>Received Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center">No messages found.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        int index = 1;
+                        foreach (var message in Model)
+                        {
+                            <tr>
+                                <td>@index</td>
+                                <td>@message.SenderName</td>
+                                <td>@message.MessageText</td>
+                                <td>@message.SentDateTime.ToString("g")</td>
+                                <td>
+                                    @if (message.IsRead)
+                                    {
+                                        <span class="badge bg-success">Read</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">Unread</span>
+                                    }
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
